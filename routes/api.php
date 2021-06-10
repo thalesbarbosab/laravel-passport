@@ -15,14 +15,15 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-
+//unprotected routes
+Route::post('users','ApiController@storeUser');
 
 //route protected by grant password
-Route::middleware('auth:api')->get('user', function (Request $request) {
-    return $request->user();
+Route::middleware('auth:api')->group(function () {
+    Route::get('me','ApiController@me');
 });
 
 //route protected by grant client credentials
-Route::middleware('client')->get('users', function (Request $request) {
-    return response()->json(User::all());
+Route::middleware('client')->group(function () {
+    Route::get('users','ApiController@users');
 });
