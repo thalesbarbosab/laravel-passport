@@ -21,6 +21,9 @@ Route::post('users','ApiController@storeUser');
 //route protected by grant password
 Route::middleware('auth:api')->group(function () {
     Route::get('me','ApiController@me');
+    Route::get('tasks','ApiController@tasks')->name('tasks.index');
+    Route::post('tasks/store','ApiController@storeTask')->name('tasks.store');
+    Route::delete('tasks/{id}/delete','ApiController@deleteTask')->name('tasks.delete');
 });
 
 //route protected by grant client credentials
