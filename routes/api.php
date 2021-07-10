@@ -1,7 +1,5 @@
 <?php
 
-use App\User;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,17 +14,17 @@ use Illuminate\Support\Facades\Route;
 */
 
 //unprotected routes
-Route::post('users','ApiController@storeUser');
+Route::post('user/reset', 'Api\\UserController@reset')->name('user.reset');
+Route::post('user', 'Api\\UserController@store')->name('user.store');
 
 //route protected by grant password
-Route::middleware('auth:api')->group(function () {
-    Route::get('me','ApiController@me');
-    Route::get('tasks','ApiController@tasks')->name('tasks.index');
-    Route::post('tasks/store','ApiController@storeTask')->name('tasks.store');
-    Route::delete('tasks/{id}/delete','ApiController@deleteTask')->name('tasks.delete');
-});
+Route::group(['middleware' => 'auth:api'], function () {
+    //user endpoints
+    Route::get('users', 'Api\\UserController@index')->name('user.index');
+    Route::get('user/me', 'Api\\UserController@me')->name('user.personal.me');
+    Route::put('user', 'Api\\UserController@update')->name('user.personal.update');
+    Route::put('user/change-password', 'Api\\UserController@changePassword')->name('user.personal.changePassword');
+    Route::post('user/logout', 'Api\\UserController@logout')->name('user.personal.logout');
 
-//route protected by grant client credentials
-Route::middleware('client')->group(function () {
-    Route::get('users','ApiController@users');
+
 });
